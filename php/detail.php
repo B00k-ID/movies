@@ -1,6 +1,6 @@
 <?php
 if (!isset($_GET['id'])) {
-    header("location: ../index.php");
+    header("location: /");
     exit;
 }
 require '../php/function.php';

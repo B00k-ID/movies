@@ -1,10 +1,19 @@
 <?php
 function koneksi()
 {
-    $conn = mysqli_connect("localhost", "root", "");
-    mysqli_select_db($conn, "pw_tubes_203040012");
+    $dbTest = "testing";
+    $dbProd = "pw_tubes_203040012";
+    $conn = mysqli_connect("localhost", "root", "root", $dbTest);
     return $conn;
 }
+
+function getDetail($id)
+{
+    $conn = koneksi();
+    $res = mysqli_query($conn, "SELECT * FROM `movies` WHERE id = $id");
+    return mysqli_fetch_object($res);
+}
+
 function query($sql)
 {
     $conn = koneksi();
@@ -63,7 +72,16 @@ function ubah($data)
     return mysqli_affected_rows($conn);
 }
 
-function registrasi($data)
+function login(array $credentials)
+{
+    $conn = koneksi();
+    $username = strtolower(stripslashes($credentials['username']));
+    $password = hash('sha256', $credentials['password']);
+    $result = mysqli_query($conn, "SELECT * FROM user WHERE `username` = '$username' AND `password`=$password");
+    return $result ? mysqli_fetch_object($result) : $result;
+}
+
+function register($data)
 {
     $conn = koneksi();
     $username = strtolower(stripslashes($data["username"]));
